@@ -4,7 +4,7 @@ import { CiBookmark } from 'react-icons/ci';
 import { auth, db } from '../Firebase/firebase';
 import { toast } from 'react-toastify';
 import { setDoc, doc } from 'firebase/firestore';
-import Navbar from './Navbar'; // Navbar component added here
+import Navbar from './Navbar';
 import LeftSidebar from './Leftsidebar';
 
 const categories = ['movie', 'music', 'sports', 'news', 'comedy'];
@@ -12,13 +12,12 @@ const categories = ['movie', 'music', 'sports', 'news', 'comedy'];
 const Explore = () => {
   const [videos, setVideos] = useState([]);
   const [loading, setLoading] = useState(true);
-
   const [category, setCategory] = useState(() => {
     const randomIndex = Math.floor(Math.random() * categories.length);
     return categories[randomIndex];
   });
-
   const [user, setUser] = useState(null);
+  const [bookmarkedIds, setBookmarkedIds] = useState([]);
 
   useEffect(() => {
     async function fetchVideos() {
@@ -65,6 +64,7 @@ const Explore = () => {
         savedAt: new Date(),
       });
 
+      setBookmarkedIds((prev) => [...prev, videoData.videoId]); // ✅ Mark it visually
       toast.success('Video bookmarked!');
     } catch (error) {
       toast.error('Failed to bookmark video');
@@ -74,7 +74,7 @@ const Explore = () => {
 
   return (
     <div className="flex flex-col md:flex-row">
-      <Navbar /> {/* Navbar added here */}
+      <Navbar />
       <LeftSidebar />
 
       <div className="flex-1 p-4 mt-20 md:ml-72">
@@ -110,6 +110,8 @@ const Explore = () => {
                 const videoData = video.video;
                 if (!videoData) return null;
 
+                const isBookmarked = bookmarkedIds.includes(videoData.videoId);
+
                 return (
                   <div
                     key={index}
@@ -117,7 +119,8 @@ const Explore = () => {
                   >
                     <button
                       onClick={() => handleBookmark(videoData)}
-                      className="absolute top-3 right-3 text-gray-500 hover:text-red-500 transition"
+                      className={`absolute top-3 right-3 text-gray-500 hover:text-red-500 transition cursor-pointer p-1 rounded-full
+                        ${isBookmarked ? 'bg-yellow-300' : 'bg-transparent'}`}
                     >
                       <CiBookmark size={28} />
                     </button>

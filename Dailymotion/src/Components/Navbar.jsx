@@ -27,6 +27,9 @@ const Navbar = () => {
     navigate('/');
   }
 
+  const HandelWatchlist=()=>{
+    navigate('/watchlist')
+  }
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       if (currentUser) {
@@ -96,13 +99,13 @@ const Navbar = () => {
             </Link>
           </>
         ) : (
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-4 ">
             {user.displayName && (
-              <span className="text-lg font-medium">{user.displayName}</span>
+              <span className="text-lg font-medium ">{user.displayName}</span>
             )}
             <button
               onClick={handleLogout}
-              className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600"
+              className=" bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600"
             >
               Logout
             </button>
@@ -125,7 +128,7 @@ const Navbar = () => {
               <MdOutlineExplore size={24} />
               <span>Explore</span>
             </li>
-            <li className="flex items-center gap-4 hover:text-gray-400 cursor-pointer">
+            <li onClick={HandelWatchlist} className="flex items-center gap-4 hover:text-gray-400 cursor-pointer">
               <CiBookmark size={24} />
               <span>Watchlist</span>
             </li>
@@ -152,7 +155,7 @@ const Navbar = () => {
             ) : (
               <>
                 {user.displayName && (
-                  <span className="text-center font-medium text-lg">
+                  <span className="text-center font-medium text-lg mt-20">
                     {user.displayName}
                   </span>
                 )}

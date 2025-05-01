@@ -4,6 +4,7 @@ import { auth, db } from '../Firebase/firebase';
 import Navbar from './Navbar';
 import LeftSidebar from './Leftsidebar';
 import { CiCircleRemove } from "react-icons/ci";
+
 const Watchlist = () => {
   const [bookmarkedVideos, setBookmarkedVideos] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -46,16 +47,16 @@ const Watchlist = () => {
   };
 
   return (
-    <div className="flex">
+    <div className="flex flex-col md:flex-row">
       <Navbar />
       <LeftSidebar />
-      <div className="flex-1 p-5 mt-20 ml-72">
+      <div className="flex-1 p-4 md:p-5 mt-20 md:ml-72">
         {loading ? (
           <p>Loading...</p>
         ) : bookmarkedVideos.length === 0 ? (
           <p>No bookmarked videos found.</p>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
             {bookmarkedVideos.map((video, index) => (
               <div
                 key={index}
@@ -70,11 +71,11 @@ const Watchlist = () => {
                 <p className="text-sm text-gray-600">{video.channelName}</p>
 
                 {/* Remove Bookmark Button */}
-                
-              
-                
-                <div onClick={() => handleRemoveBookmark(video.id)} className="absolute top-3 right-3 text-red-500 hover:text-red-700 transition duration-200">
-                <CiCircleRemove style={{color:'black', cursor:'pointer'}} size={28}/>
+                <div
+                  onClick={() => handleRemoveBookmark(video.id)}
+                  className="absolute top-3 right-3 text-red-500 hover:text-red-700 transition duration-200"
+                >
+                  <CiCircleRemove style={{ color: 'red', cursor: 'pointer' }} size={28} />
                 </div>
               </div>
             ))}
