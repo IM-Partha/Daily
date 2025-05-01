@@ -1,7 +1,7 @@
 import React from 'react'
-import Navbar from '../Components/Navbar'
-import Leftsidebar from '../Components/Leftsidebar'
-import VideoList from '../Components/Videolist'
+import Navbar from '../components/Navbar'
+import Leftsidebar from '../components/Leftsidebar'
+import VideoList from '../components/Videolist'
 
 const Home = () => {
   return (

@@ -7,10 +7,10 @@ import { Link, useNavigate } from "react-router-dom";
 import { IoHomeOutline } from "react-icons/io5";
 import { MdOutlineExplore } from "react-icons/md";
 import { CiBookmark } from "react-icons/ci";
-import { auth } from "../Firebase/firebase";
+import { auth } from "../Firebase/firebase.js";
 import { signOut, onAuthStateChanged } from "firebase/auth";
 import { useDispatch, useSelector } from 'react-redux';  
-import { setSearchQuery } from '../Redux/searchSlice.js';  
+import { setSearchQuery } from '../Redux/searchSlice.js.js';  
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);

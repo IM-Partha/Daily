@@ -1,6 +1,6 @@
 import React from "react";
 import { useParams } from "react-router-dom";
-import VideoPlayer from "../Components/VideoPlayer"; // Import the VideoPlayer component
+import VideoPlayer from "./VideoPlayer"; // Import the VideoPlayer component
 
 const VideoPage = () => {
   const { videoId } = useParams(); // Get videoId from URL
