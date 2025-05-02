@@ -37,7 +37,7 @@ const LeftSidebar = () => {
           gl: 'US'
         },
         headers: {
-          'x-rapidapi-key': '79732050efmshaa60ec78bdf06b9p1a3275jsnfea60d4c3d3c',
+          'x-rapidapi-key': '94dacf3346msh6201d9388198241p1f5aa0jsn3522851446e0',
           'x-rapidapi-host': 'youtube-data8.p.rapidapi.com'
         }
       };

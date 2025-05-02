@@ -1,3 +1,4 @@
+// src/components/Navbar.js
 import React, { useState, useEffect } from "react";
 import Logo from "../assets/Logo.png";
 import { CiLogin } from "react-icons/ci";
@@ -9,27 +10,29 @@ import { MdOutlineExplore } from "react-icons/md";
 import { CiBookmark } from "react-icons/ci";
 import { auth } from "../Firebase/firebase.js";
 import { signOut, onAuthStateChanged } from "firebase/auth";
-import { useDispatch, useSelector } from 'react-redux';  
-import { setSearchQuery } from '../Redux/searchSlice.js.js';  
+import { useSearch } from "../context/SearchContext.jsx";
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [user, setUser] = useState(null);
-  const dispatch = useDispatch(); 
-  const searchQuery = useSelector(state => state.search.query); // Access search query from Redux store
+  const { searchQuery, updateSearchQuery } = useSearch(); // Access search query from context
   const navigate = useNavigate();
 
+  // Handle Explore navigation
   const handleExplore = () => {
     navigate('/explore');
-  }
+  };
 
+  // Handle "For You" navigation
   const HandelClickForYou = () => {
     navigate('/');
-  }
+  };
 
-  const HandelWatchlist=()=>{
-    navigate('/watchlist')
-  }
+  // Handle Watchlist navigation
+  const HandelWatchlist = () => {
+    navigate('/watchlist');
+  };
+
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       if (currentUser) {
@@ -39,7 +42,7 @@ const Navbar = () => {
       }
     });
 
-    return () => unsubscribe(); 
+    return () => unsubscribe();
   }, []);
 
   const handleLogout = async () => {
@@ -51,11 +54,11 @@ const Navbar = () => {
     }
   };
 
-  // Handle search input and dispatch it to Redux store
+  // Handle search input change
   const handleSearchChange = (e) => {
-    const value = e.target.value;
-    dispatch(setSearchQuery(value));  // Update Redux store with new search query
-  }
+    updateSearchQuery(e.target.value); // Update the search query in context
+    console.log("Search Query: ", e.target.value);
+  };
 
   return (
     <div className="fixed top-0 left-0 right-0 z-50 flex justify-between items-center shadow px-6 py-6 bg-white">
@@ -75,8 +78,8 @@ const Navbar = () => {
           className="w-full md:w-[500px] p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           type="text"
           placeholder="Search..."
-          value={searchQuery} // Bind Redux state to input value
-          onChange={handleSearchChange} // Update search query in Redux store
+          value={searchQuery} // Bind the input field to the global search query
+          onChange={handleSearchChange} // Handle changes to update search query in context
         />
       </div>
 
