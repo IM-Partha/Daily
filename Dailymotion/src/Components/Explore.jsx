@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import axios from 'axios';
 import { CiBookmark } from 'react-icons/ci';
-import { auth, db } from '../Firebase/firebase';
+import { auth, db } from '../firebase/firebase';
 import { toast } from 'react-toastify';
 import { setDoc, doc, collection, getDocs, query, where } from 'firebase/firestore';
 import Navbar from './Navbar';

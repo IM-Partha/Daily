@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { collection, query, where, getDocs, deleteDoc, doc } from "firebase/firestore";
-import { auth, db } from '../Firebase/firebase';
+import { auth, db } from '../firebase/firebase';
 import Navbar from './Navbar';
 import LeftSidebar from './Leftsidebar';
 import { CiCircleRemove } from "react-icons/ci";

@@ -1,7 +1,7 @@
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { auth } from "../Firebase/firebase";
+import { auth } from "../firebase/firebase";
 import { getFirestore, doc, setDoc, setLogLevel } from "firebase/firestore";
 import { toast } from "react-toastify";
 

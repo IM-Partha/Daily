@@ -3,7 +3,7 @@ import axios from 'axios';
 import { CiBookmark } from 'react-icons/ci';
 import { Link } from 'react-router-dom'; 
 import LoadingSkeleton from './LoadingSkeleton'; 
-import { auth, db } from '../Firebase/firebase';  
+import { auth, db } from '../firebase/firebase';  
 import { toast } from 'react-toastify';  
 import { deleteDoc, doc, setDoc } from 'firebase/firestore';
 import { useSearch } from '../context/SearchContext';  // Import the search context
