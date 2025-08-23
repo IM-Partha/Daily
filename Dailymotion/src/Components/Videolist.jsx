@@ -67,7 +67,8 @@ const VideoList = () => {
     }
 
     const docId = `${user.uid}_${videoData.videoId}`;
-    const docRef = doc(db, "watchlist", docId);
+const docRef = doc(db, "users", user.uid, "bookmarks", videoData.videoId);
+
 
     try {
       if (bookmarkedVideos.has(videoData.videoId)) {

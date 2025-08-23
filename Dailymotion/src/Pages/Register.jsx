@@ -62,23 +62,25 @@ const Register = () => {
     }
 
     try {
+      // Create user in Firebase Auth
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      const user = userCredential.user;
+      console.log("User created:", userCredential.user.uid);
 
-      await updateProfile(user, {
-        displayName: name,
-      });
+      // Update profile
+      await updateProfile(auth.currentUser, { displayName: name });
+      console.log("Profile updated");
 
-      await setDoc(doc(db, "users", user.uid), {
-        name,
-        email,
-      });
+      // Save to Firestore
+      await setDoc(doc(db, "users", userCredential.user.uid), { name, email });
+      console.log("User saved in Firestore");
 
-      navigate("/login");
+      // Success message
       toast.success("Registration successful!");
-      
+      navigate("/login");
     } catch (err) {
-      // toast.error("Error registering: " + err.message);
+      console.error("Registration failed:", err.code, err.message);
+      toast.error("Error registering: " + err.message);
+      setError(err.message);
     } finally {
       setLoading(false);
     }
