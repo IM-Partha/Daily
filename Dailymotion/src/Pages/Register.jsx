@@ -74,10 +74,11 @@ const Register = () => {
         email,
       });
 
-      toast.success("Registration successful!");
       navigate("/login");
+      toast.success("Registration successful!");
+      
     } catch (err) {
-      toast.error("Error registering: " + err.message);
+      // toast.error("Error registering: " + err.message);
     } finally {
       setLoading(false);
     }
