@@ -5,6 +5,37 @@ import { CiBookmark } from "react-icons/ci";
 import { useNavigate } from "react-router-dom";
 import axios from 'axios';
 
+const defaultRecommendations = [
+  {
+    video: {
+      videoId: "dQw4w9WgXcQ",
+      title: "Rick Astley - Never Gonna Give You Up",
+      channelName: "Rick Astley"
+    }
+  },
+  {
+    video: {
+      videoId: "kJQP7kiw5Fk",
+      title: "Lo-Fi Beats for Studying & Relaxing",
+      channelName: "Lofi Girl"
+    }
+  },
+  {
+    video: {
+      videoId: "9bZkp7q19f0",
+      title: "PSY - GANGNAM STYLE M/V",
+      channelName: "officialpsy"
+    }
+  },
+  {
+    video: {
+      videoId: "jNQXAC9IVRw",
+      title: "Me at the zoo - First YouTube Video",
+      channelName: "jawed"
+    }
+  }
+];
+
 const LeftSidebar = () => {
   const navigate = useNavigate();
   const [recommendations, setRecommendations] = useState([]);
@@ -13,18 +44,13 @@ const LeftSidebar = () => {
     navigate('/watchlist');
   };
 
-  const handleHomepage = () => {
-    navigate('/');
-  };
-
   const handlePlayVideo = (videoId) => {
-    // Navigate to VideoPage with the videoId
     navigate(`/video/${videoId}`);
   };
 
-  const handleExplore= ()=> {
-    navigate('/explore')
-  }
+  const handleExplore = () => {
+    navigate('/');
+  };
 
   useEffect(() => {
     const fetchApiData = async () => {
@@ -44,9 +70,15 @@ const LeftSidebar = () => {
 
       try {
         const response = await axios.request(options);
-        setRecommendations(response.data.contents || []);
+        const contents = response.data.contents || [];
+        if (contents.length > 0) {
+          setRecommendations(contents);
+        } else {
+          setRecommendations(defaultRecommendations);
+        }
       } catch (error) {
-        console.error("Error fetching recommendations:", error);
+        console.error("Error fetching recommendations, using fallbacks:", error);
+        setRecommendations(defaultRecommendations);
       }
     };
 
@@ -56,10 +88,6 @@ const LeftSidebar = () => {
   return (
     <div className="cursor-pointer hidden md:block w-64 h-[calc(100vh-88px)] bg-white text-black p-6 fixed top-24 left-0 overflow-y-auto">
       <ul className="space-y-6 mb-8">
-        <li onClick={handleHomepage} className="flex items-center gap-4 hover:text-gray-400">
-          <IoHomeOutline size={24} />
-          <span>For You</span>
-        </li>
         <li onClick={handleExplore} className="flex items-center gap-4 hover:text-gray-400">
           <MdOutlineExplore size={24} />
           <span>Explore</span>

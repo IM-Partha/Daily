@@ -117,23 +117,11 @@ const docRef = doc(db, "users", user.uid, "bookmarks", videoData.videoId);
     }
   };
 
-  const handleSearchChange = (e) => {
-    updateSearchQuery(e.target.value);  
-  };
-
   if (loading) return <LoadingSkeleton />;
   if (error) return <p>{error}</p>;
 
   return (
     <div className="p-5">
-      <input
-        type="text"
-        value={searchQuery}
-        onChange={handleSearchChange}
-        placeholder="Search for videos..."
-        className="p-2 mb-4 w-full border rounded"
-      />
-
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-5">
         {videos.length > 0 ? (
           videos.map((video, index) => {

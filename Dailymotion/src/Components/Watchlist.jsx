@@ -4,8 +4,10 @@ import { auth, db } from '../Firebase/firebase';
 import Navbar from './Navbar';
 import LeftSidebar from './Leftsidebar';
 import { CiCircleRemove } from "react-icons/ci";
+import { useSearch } from '../Context/SearchContext';
 
 const Watchlist = () => {
+  const { searchQuery } = useSearch();
   const [bookmarkedVideos, setBookmarkedVideos] = useState([]);
   const [user, setUser] = useState(null);
 
@@ -46,19 +48,26 @@ const Watchlist = () => {
     }
   };
 
+  const filteredVideos = bookmarkedVideos.filter((video) => {
+    if (!video?.title) return false;
+    return video.title.toLowerCase().includes(searchQuery.toLowerCase());
+  });
+
   return (
     <div className="flex flex-col md:flex-row">
       <Navbar />
       <LeftSidebar />
       <div className="flex-1 p-4 md:p-5 mt-20 md:ml-72">
-        {bookmarkedVideos.length === 0 ? (
+        {filteredVideos.length === 0 ? (
           <div className="flex flex-col items-center justify-center min-h-[50vh] text-center">
             <p className="text-2xl font-semibold text-gray-500">No Watchlist</p>
-            <p className="text-gray-400 mt-2">Add videos to your watchlist to see them here.</p>
+            <p className="text-gray-400 mt-2">
+              {searchQuery ? "No matching videos found in your watchlist." : "Add videos to your watchlist to see them here."}
+            </p>
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-            {bookmarkedVideos.map((video, index) => (
+            {filteredVideos.map((video, index) => (
               <div
                 key={index}
                 className="relative shadow-md p-4 rounded-md bg-white hover:shadow-lg transition duration-300"

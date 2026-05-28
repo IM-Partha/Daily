@@ -1,7 +1,6 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
 import "./App.css";
-import Home from "./Pages/Home";
 import Login from "./Pages/Login";
 import Register from "./Pages/Register";
 import ToastContainer from "./Components/ToastContainer";
@@ -15,7 +14,7 @@ function App() {
     <>
       <SearchProvider>
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<Explore />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/watchlist" element={<Watchlist />} />

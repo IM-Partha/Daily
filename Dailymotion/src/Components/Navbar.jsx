@@ -20,11 +20,6 @@ const Navbar = () => {
 
   // Handle Explore navigation
   const handleExplore = () => {
-    navigate('/explore');
-  };
-
-  // Handle "For You" navigation
-  const HandelClickForYou = () => {
     navigate('/');
   };
 
@@ -68,9 +63,11 @@ const Navbar = () => {
             {menuOpen ? <FiX size={24} /> : <FiMenu size={24} />}
           </button>
         </div>
-        <div>
-          <img className="h-5" src={Logo} alt="logo" />
-        </div>
+        <Link to="/" className="flex items-center">
+          <span className="text-2xl font-black tracking-tighter text-black hover:opacity-80 transition font-sans">
+            DAILYMOTION
+          </span>
+        </Link>
       </div>
 
       <div className="w-full md:w-auto flex mx-6">
@@ -123,10 +120,6 @@ const Navbar = () => {
           </button>
 
           <ul className="space-y-6 mb-4">
-            <li onClick={HandelClickForYou} className="flex items-center gap-4 hover:text-gray-400 cursor-pointer">
-              <IoHomeOutline size={24} />
-              <span>For You</span>
-            </li>
             <li onClick={handleExplore} className="flex items-center gap-4 hover:text-gray-400 cursor-pointer">
               <MdOutlineExplore size={24} />
               <span>Explore</span>
