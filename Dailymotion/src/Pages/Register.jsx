@@ -1,8 +1,8 @@
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { auth } from "../firebase/firebase";
-import { getFirestore, doc, setDoc, setLogLevel } from "firebase/firestore";
+import { auth, db } from "../Firebase/firebase";
+import { doc, setDoc, setLogLevel } from "firebase/firestore";
 import { toast } from "react-toastify";
 
 // Optional: Reduce console noise
@@ -19,7 +19,6 @@ const Register = () => {
   const [error, setError] = useState(null);
 
   const navigate = useNavigate();
-  const db = getFirestore();
 
   // Handle input change
   function handleChange(e) {

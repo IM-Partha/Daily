@@ -1,41 +1,41 @@
 import React, { useEffect, useState } from 'react';
-import { collection, query, where, getDocs, deleteDoc, doc } from "firebase/firestore";
-import { auth, db } from '../firebase/firebase';
+import { collection, getDocs, deleteDoc, doc } from "firebase/firestore";
+import { auth, db } from '../Firebase/firebase';
 import Navbar from './Navbar';
 import LeftSidebar from './Leftsidebar';
 import { CiCircleRemove } from "react-icons/ci";
 
 const Watchlist = () => {
   const [bookmarkedVideos, setBookmarkedVideos] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState(null);
 
-  // Fetch bookmarked videos from Firestore
+  // Listen to Auth state changes and fetch bookmarked videos
   useEffect(() => {
-    const fetchBookmarked = async () => {
-      const user = auth.currentUser;
-      if (!user) return;
+    const unsubscribe = auth.onAuthStateChanged(async (currentUser) => {
+      setUser(currentUser);
+      if (!currentUser) {
+        setBookmarkedVideos([]);
+        return;
+      }
 
-      const q = query(
-        collection(db, "watchlist"),
-        where("userId", "==", user.uid)
-      );
-
-      const querySnapshot = await getDocs(q);
-      const videos = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-      setBookmarkedVideos(videos);
-      setLoading(false);
-    };
-
-    fetchBookmarked();
+      try {
+        const q = collection(db, "users", currentUser.uid, "bookmarks");
+        const querySnapshot = await getDocs(q);
+        const videos = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        setBookmarkedVideos(videos);
+      } catch (error) {
+        console.error("Error fetching bookmarks:", error);
+      }
+    });
+    return () => unsubscribe();
   }, []);
 
   // Handle video removal
   const handleRemoveBookmark = async (videoId) => {
-    const user = auth.currentUser;
     if (!user) return;
 
     try {
-      const videoRef = doc(db, "watchlist", videoId); // Assuming the document ID is stored in Firestore
+      const videoRef = doc(db, "users", user.uid, "bookmarks", videoId);
       await deleteDoc(videoRef); // Delete the video from Firestore
       // Remove from local state
       setBookmarkedVideos((prevVideos) =>
@@ -51,10 +51,11 @@ const Watchlist = () => {
       <Navbar />
       <LeftSidebar />
       <div className="flex-1 p-4 md:p-5 mt-20 md:ml-72">
-        {loading ? (
-          <p>Loading...</p>
-        ) : bookmarkedVideos.length === 0 ? (
-          <p>No bookmarked videos found.</p>
+        {bookmarkedVideos.length === 0 ? (
+          <div className="flex flex-col items-center justify-center min-h-[50vh] text-center">
+            <p className="text-2xl font-semibold text-gray-500">No Watchlist</p>
+            <p className="text-gray-400 mt-2">Add videos to your watchlist to see them here.</p>
+          </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
             {bookmarkedVideos.map((video, index) => (

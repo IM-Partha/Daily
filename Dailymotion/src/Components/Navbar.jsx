@@ -8,9 +8,9 @@ import { Link, useNavigate } from "react-router-dom";
 import { IoHomeOutline } from "react-icons/io5";
 import { MdOutlineExplore } from "react-icons/md";
 import { CiBookmark } from "react-icons/ci";
-import { auth } from "../firebase/firebase.js";
+import { auth } from "../Firebase/firebase.js";
 import { signOut, onAuthStateChanged } from "firebase/auth";
-import { useSearch } from "../context/SearchContext.jsx";
+import { useSearch } from "../Context/SearchContext.jsx";
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);

@@ -3,10 +3,10 @@ import axios from 'axios';
 import { CiBookmark } from 'react-icons/ci';
 import { Link } from 'react-router-dom'; 
 import LoadingSkeleton from './LoadingSkeleton'; 
-import { auth, db } from '../firebase/firebase';  
+import { auth, db } from '../Firebase/firebase';  
 import { toast } from 'react-toastify';  
-import { deleteDoc, doc, setDoc } from 'firebase/firestore';
-import { useSearch } from '../context/SearchContext';  // Import the search context
+import { deleteDoc, doc, setDoc, collection, getDocs } from 'firebase/firestore';
+import { useSearch } from '../Context/SearchContext';  // Import the search context
 
 const VideoList = () => {
   const [videos, setVideos] = useState([]);
@@ -56,6 +56,24 @@ const VideoList = () => {
 
     return () => unsubscribe(); 
   }, [searchQuery]); 
+
+  useEffect(() => {
+    const fetchBookmarks = async () => {
+      if (!user) {
+        setBookmarkedVideos(new Set());
+        return;
+      }
+      try {
+        const q = collection(db, "users", user.uid, "bookmarks");
+        const querySnapshot = await getDocs(q);
+        const ids = querySnapshot.docs.map((doc) => doc.id);
+        setBookmarkedVideos(new Set(ids));
+      } catch (error) {
+        console.error("Error fetching bookmarks:", error);
+      }
+    };
+    fetchBookmarks();
+  }, [user]);
 
   const handleBookmark = async (videoData) => {
     if (!user) {

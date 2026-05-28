@@ -1,9 +1,9 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import axios from 'axios';
 import { CiBookmark } from 'react-icons/ci';
-import { auth, db } from '../firebase/firebase';
+import { auth, db } from '../Firebase/firebase';
 import { toast } from 'react-toastify';
-import { setDoc, doc, collection, getDocs, query, where } from 'firebase/firestore';
+import { setDoc, doc, collection, getDocs, deleteDoc } from 'firebase/firestore';
 import Navbar from './Navbar';
 import LeftSidebar from './Leftsidebar';
 
@@ -57,12 +57,19 @@ const Explore = () => {
 
   useEffect(() => {
     const fetchBookmarks = async () => {
-      if (!user) return;
+      if (!user) {
+        setBookmarkedIds([]);
+        return;
+      }
 
-      const q = query(collection(db, 'watchlist'), where('userId', '==', user.uid));
-      const querySnapshot = await getDocs(q);
-      const ids = querySnapshot.docs.map((doc) => doc.data().videoId);
-      setBookmarkedIds(ids);
+      try {
+        const q = collection(db, "users", user.uid, "bookmarks");
+        const querySnapshot = await getDocs(q);
+        const ids = querySnapshot.docs.map((doc) => doc.id);
+        setBookmarkedIds(ids);
+      } catch (error) {
+        console.error("Error fetching bookmarks:", error);
+      }
     };
 
     fetchBookmarks();
@@ -75,24 +82,30 @@ const Explore = () => {
         return;
       }
 
-      const docId = `${user.uid}_${videoData.videoId}`;
-      const docRef = doc(db, 'watchlist', docId);
+      const docRef = doc(db, "users", user.uid, "bookmarks", videoData.videoId);
+      const isBookmarked = bookmarkedIds.includes(videoData.videoId);
 
       try {
-        await setDoc(docRef, {
-          ...videoData,
-          userId: user.uid,
-          savedAt: new Date(),
-        });
+        if (isBookmarked) {
+          await deleteDoc(docRef);
+          setBookmarkedIds((prev) => prev.filter((id) => id !== videoData.videoId));
+          toast.success('Bookmark removed!');
+        } else {
+          await setDoc(docRef, {
+            ...videoData,
+            userId: user.uid,
+            savedAt: new Date(),
+          });
 
-        setBookmarkedIds((prev) => [...prev, videoData.videoId]);
-        toast.success('Video bookmarked!');
+          setBookmarkedIds((prev) => [...prev, videoData.videoId]);
+          toast.success('Video bookmarked!');
+        }
       } catch (error) {
-        toast.error('Failed to bookmark video');
+        toast.error('Failed to manage bookmark');
         console.error('Bookmark error:', error);
       }
     },
-    [user]
+    [user, bookmarkedIds]
   );
 
   return (
